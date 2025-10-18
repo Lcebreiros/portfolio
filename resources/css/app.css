@@ -1,0 +1,396 @@
+/* Importar fuente Inter desde Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+/* Importar Tailwind CSS v4 */
+@import "tailwindcss";
+
+/* Temas y variables personalizadas para Tailwind v4 */
+@theme {
+    /* Colores personalizados */
+    --color-primary-dark: #0f0525;
+    --color-secondary-dark: #1a0b2e;
+    --color-tertiary-dark: #2d1b4e;
+    --color-purple-primary: #7c3aed;
+    --color-purple-secondary: #a855f7;
+    --color-purple-hover: #9333ea;
+    --color-purple-dark: #5b21b6;
+    --color-pink-accent: #ec4899;
+
+    /* Fuentes */
+    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+
+    /* Animaciones */
+    --animate-fade-in: fade-in 0.5s ease-in-out;
+    --animate-slide-up: slide-up 0.5s ease-out;
+    --animate-float: float 3s ease-in-out infinite;
+
+    @keyframes fade-in {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes slide-up {
+        from {
+            transform: translateY(20px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes float {
+        0%, 100% {
+            transform: translateY(0px);
+        }
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+}
+
+/* Estilos base */
+* {
+    scroll-behavior: smooth;
+}
+
+html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-family: var(--font-sans);
+    background-color: var(--color-primary-dark);
+    color: #f3f4f6;
+}
+
+/* Personalizar scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: var(--color-primary-dark);
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--color-purple-primary);
+    border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-purple-hover);
+}
+
+/* Clases de utilidad personalizadas con @utility */
+@utility text-gradient {
+    background: linear-gradient(to right, #c084fc, #ec4899);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+@utility text-gradient-alt {
+    background: linear-gradient(to right, var(--color-purple-primary), var(--color-purple-secondary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+@utility glass {
+    background-color: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@utility shadow-neon-purple {
+    box-shadow: 0 0 20px rgba(124, 58, 237, 0.5);
+}
+
+@utility text-shadow {
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+@utility bg-dots {
+    background-image: radial-gradient(circle, rgba(124, 58, 237, 0.15) 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+
+/* Componentes personalizados (con hover incluido) */
+.card-hover {
+    transition: all 0.3s ease-in-out;
+}
+
+.card-hover:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 40px 0 rgba(124, 58, 237, 0.5);
+}
+
+.btn-primary {
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(to right, #9333ea, #ec4899);
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.3s;
+    box-shadow: 0 4px 14px 0 rgba(124, 58, 237, 0.39);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(to right, #7c3aed, #db2777);
+    transform: scale(1.05);
+    box-shadow: 0 10px 40px 0 rgba(124, 58, 237, 0.5);
+}
+
+.btn-secondary {
+    padding: 0.75rem 1.5rem;
+    background-color: var(--color-secondary-dark);
+    border: 1px solid #7c3aed;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.btn-secondary:hover {
+    background-color: var(--color-tertiary-dark);
+    border-color: #a855f7;
+}
+
+.input-style {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background-color: var(--color-tertiary-dark);
+    border: 1px solid rgba(124, 58, 237, 0.5);
+    border-radius: 0.5rem;
+    color: #f3f4f6;
+    transition: all 0.3s;
+}
+
+.input-style::placeholder {
+    color: #9ca3af;
+}
+
+.input-style:focus {
+    outline: none;
+    border-color: #7c3aed;
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.5);
+}
+
+.tech-badge {
+    padding: 0.25rem 0.75rem;
+    background-color: rgba(124, 58, 237, 0.2);
+    color: #c084fc;
+    font-size: 0.75rem;
+    border-radius: 9999px;
+    border: 1px solid #7c3aed;
+    transition: background-color 0.2s;
+}
+
+.tech-badge:hover {
+    background-color: rgba(124, 58, 237, 0.3);
+}
+
+.section-container {
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 5rem 1rem;
+}
+
+.section-title {
+    font-size: 2.25rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+@media (min-width: 768px) {
+    .section-title {
+        font-size: 3rem;
+    }
+}
+
+.divider-gradient {
+    height: 1px;
+    background: linear-gradient(to right, transparent, #7c3aed, transparent);
+}
+
+.separator {
+    position: relative;
+    height: 0.25rem;
+    width: 5rem;
+    margin: 2rem auto;
+    background: linear-gradient(90deg, 
+        rgba(124, 58, 237, 0) 0%, 
+        rgba(124, 58, 237, 1) 50%, 
+        rgba(124, 58, 237, 0) 100%
+    );
+}
+
+/* Animaciones personalizadas */
+@keyframes gradient-shift {
+    0%, 100% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+.animate-gradient {
+    background-size: 200% 200%;
+    animation: gradient-shift 3s ease infinite;
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mejoras de accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+:root {
+  --tech-icon-size: 22px; /* cambia a 20/24 si querés */
+}
+
+/* Fondo más oscuro para las tarjetas de tecnologías */
+.darker-glass {
+  /* fondo oscuro translúcido coherente con tu tema */
+  background-color: rgba(0, 0, 0, 0.55); /* MÁS OSCURO */
+  border: 1px solid rgba(124, 58, 237, 0.12); /* sutil borde púrpura */
+  backdrop-filter: blur(8px);
+}
+
+/* Aseguramos que las variantes coloreadas de Devicon se muestren sin override */
+.tech-icon i {
+  font-size: var(--tech-icon-size);
+  line-height: 1;
+  display: block;
+  /* no forzar color ni filtros sobre los SVG/font icons coloreados */
+  color: initial !important;
+  fill: initial !important;
+  filter: none !important;
+  opacity: 1;
+  transition: transform .12s ease, filter .12s ease;
+}
+
+/* etiqueta debajo del icono (texto pequeño) */
+.tech-icon span {
+  color: #e6e6f0;
+  font-size: 0.7rem;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+/* hover sutil: mantén color original, solo elevamos y agregamos sombra */
+.tech-icon:hover i {
+  transform: translateY(-4px) scale(1.04);
+  filter: drop-shadow(0 8px 20px rgba(0,0,0,0.5));
+}
+
+/* si algún icono se muestra monocromático por override, puedes forzar la variante colored usando :before (fallback) */
+/* NOTE: no recomendado salvo que sea estrictamente necesario. Mantener comentado. */
+/*
+.tech-icon i::before {
+  content: '';
+}
+*/
+
+/* responsive: en pantallas muy pequeñas reduce un pelín */
+@media (max-width: 420px) {
+  :root { --tech-icon-size: 20px; }
+  .section-container { padding: 3rem 0.75rem; }
+}
+
+/* ============================================
+   BOTONES CON EFECTOS AVANZADOS
+   ============================================ */
+
+/* Botón con efecto de brillo deslizante */
+.btn-shine {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.btn-shine::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn-shine:hover::before {
+    left: 100%;
+}
+
+.btn-shine:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(124, 58, 237, 0.5);
+}
+
+/* Animación de rebote para iconos */
+@keyframes bounce-icon {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+/* Botón CV con mejores efectos */
+.btn-cv {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #9333ea 0%, #ec4899 100%);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-cv::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #7c3aed 0%, #db2777 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.btn-cv:hover::after {
+    opacity: 1;
+}
+
+.btn-cv:hover {
+    transform: translateY(-2px) scale(1.02);
+}
+
+.btn-cv:active {
+    transform: translateY(0) scale(0.98);
+}
