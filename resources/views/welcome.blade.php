@@ -3,12 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leandro Cebreiros - Desarrollador Web Fullstack</title>
+    <title>Leandro Cebreiros - {{ __('messages.hero.role') }}</title>
     <!-- Devicon icons CDN -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css">
 
+    <!-- Fonts: Inter (UI) + Poppins (name) -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        :root{ --font-ui: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; --font-name: 'Poppins', system-ui; }
+        body{ font-family: var(--font-ui); }
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-20px); }
@@ -40,6 +46,13 @@
         
         html {
             scroll-behavior: smooth;
+        }
+
+        /* Hero name styling */
+        .hero-name{
+            font-family: var(--font-name);
+            letter-spacing: -0.02em;
+            line-height: 1;
         }
         
         .section-reveal {
@@ -76,30 +89,36 @@
             <!-- Menu Desktop -->
             <div class="hidden md:flex items-center gap-1">
                 <a href="#hero" class="nav-link px-4 py-2 text-sm text-gray-300 hover:text-white rounded-lg transition-colors duration-200">
-                    Inicio
+                    {{ __('messages.nav.inicio') }}
                 </a>
                 <a href="#proyectos" class="nav-link px-4 py-2 text-sm text-gray-300 hover:text-white rounded-lg transition-colors duration-200">
-                    Proyectos
+                    {{ __('messages.nav.proyectos') }}
                 </a>
                 <a href="#tecnologias" class="nav-link px-4 py-2 text-sm text-gray-300 hover:text-white rounded-lg transition-colors duration-200">
-                    Tecnologías
+                    {{ __('messages.nav.tecnologias') }}
                 </a>
                 <a href="#sobre-mi" class="nav-link px-4 py-2 text-sm text-gray-300 hover:text-white rounded-lg transition-colors duration-200">
-                    Sobre Mí
+                    {{ __('messages.nav.sobre_mi') }}
                 </a>
                 <a href="#contacto" class="nav-link px-4 py-2 text-sm text-gray-300 hover:text-white rounded-lg transition-colors duration-200">
-                    Contacto
+                    {{ __('messages.nav.contacto') }}
                 </a>
+
+                <!-- Language switcher -->
+                <div class="ml-3 flex items-center gap-2">
+                    <a href="{{ route('lang.switch', 'es') }}" class="text-sm px-2 py-1 rounded hover:bg-white/5 {{ app()->getLocale() === 'es' ? 'bg-white/5 font-semibold' : '' }}">ES</a>
+                    <a href="{{ route('lang.switch', 'en') }}" class="text-sm px-2 py-1 rounded hover:bg-white/5 {{ app()->getLocale() === 'en' ? 'bg-white/5 font-semibold' : '' }}">EN</a>
+                </div>
                 
                 <!-- Botón Descargar CV Mejorado -->
-                <a href="docs/cv-leandro-cebreiros.pdf" download class="ml-4 group relative flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-sm font-medium rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-purple-600/50">
+                <a href="docs/Leandro-Cebreiros.pdf" download class="ml-4 group relative flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-sm font-medium rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-purple-600/50">
                     <!-- Efecto de brillo al hover -->
                     <span class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700"></span>
                     
                     <svg class="w-4 h-4 relative z-10 group-hover:animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                     </svg>
-                    <span class="relative z-10">Descargar CV</span>
+                    <span class="relative z-10">{{ __('messages.nav.download') }}</span>
                 </a>
             </div>
 
@@ -116,30 +135,35 @@
     <div id="mobile-menu" class="hidden md:hidden bg-[#0f0525]/95 backdrop-blur-lg border-t border-purple-500/10">
         <div class="px-4 py-4 space-y-2">
             <a href="#hero" class="block px-4 py-3 text-gray-300 hover:text-white hover:bg-purple-600/20 rounded-lg transition-all duration-200">
-                Inicio
+                {{ __('messages.nav.inicio') }}
             </a>
             <a href="#proyectos" class="block px-4 py-3 text-gray-300 hover:text-white hover:bg-purple-600/20 rounded-lg transition-all duration-200">
-                Proyectos
+                {{ __('messages.nav.proyectos') }}
             </a>
             <a href="#tecnologias" class="block px-4 py-3 text-gray-300 hover:text-white hover:bg-purple-600/20 rounded-lg transition-all duration-200">
-                Tecnologías
+                {{ __('messages.nav.tecnologias') }}
             </a>
             <a href="#sobre-mi" class="block px-4 py-3 text-gray-300 hover:text-white hover:bg-purple-600/20 rounded-lg transition-all duration-200">
-                Sobre Mí
+                {{ __('messages.nav.sobre_mi') }}
             </a>
             <a href="#contacto" class="block px-4 py-3 text-gray-300 hover:text-white hover:bg-purple-600/20 rounded-lg transition-all duration-200">
-                Contacto
+                {{ __('messages.nav.contacto') }}
             </a>
             
             <!-- Botón CV Mobile Mejorado -->
-            <a href="docs/cv-leandro-cebreiros.pdf" download class="group relative flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-medium rounded-lg overflow-hidden transition-all duration-300 mt-2 hover:shadow-xl hover:shadow-purple-600/50">
+            <a href="docs/Leandro-Cebreiros.pdf" download class="group relative flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-medium rounded-lg overflow-hidden transition-all duration-300 mt-2 hover:shadow-xl hover:shadow-purple-600/50">
                 <span class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700"></span>
                 
                 <svg class="w-5 h-5 relative z-10 group-hover:animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                 </svg>
-                <span class="relative z-10">Descargar CV</span>
+                <span class="relative z-10">{{ __('messages.nav.download') }}</span>
             </a>
+
+            <div class="flex items-center gap-3 px-4 pt-3">
+                <a href="{{ route('lang.switch', 'es') }}" class="text-sm px-3 py-2 rounded hover:bg-white/5 {{ app()->getLocale() === 'es' ? 'bg-white/5 font-semibold' : '' }}">ES</a>
+                <a href="{{ route('lang.switch', 'en') }}" class="text-sm px-3 py-2 rounded hover:bg-white/5 {{ app()->getLocale() === 'en' ? 'bg-white/5 font-semibold' : '' }}">EN</a>
+            </div>
         </div>
     </div>
 </nav>
@@ -173,11 +197,11 @@
             </a>
             
             <!-- Botón CV Mobile -->
-            <a href="docs/cv-leandro-cebreiros.pdf" download class="flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-medium rounded-lg transition-all duration-300 mt-2">
+            <a href="docs/Leandro-Cebreiros.pdf" download class="flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-medium rounded-lg transition-all duration-300 mt-2">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                 </svg>
-                Descargar CV
+                {{ __('messages.nav.download') }}
             </a>
         </div>
     </div>
@@ -205,7 +229,7 @@
     </nav>
 
     <!-- Hero Section con Foto -->
-    <section id="hero" class="h-screen flex items-center justify-center px-4 relative overflow-hidden">
+    <section id="hero" class="h-[110vh] flex items-center justify-center px-4 relative overflow-hidden">
         <!-- Fondo animado -->
         <div class="absolute inset-0 opacity-20">
             <div class="absolute top-20 left-10 w-72 h-72 bg-purple-500 rounded-full filter blur-3xl animate-float"></div>
@@ -220,13 +244,12 @@
                         <span id="typing-text"></span>
                         <span class="typing-cursor">|</span>
                     </h2>
-                    <p class="text-2xl text-purple-300 font-medium">Desarrollador Web</p>
+                    <p class="text-2xl text-purple-300 font-medium">{{ __('messages.hero.role') }}</p>
                 </div>
                 
-                <p class="text-lg text-gray-300 leading-relaxed">
-                    <span class="text-purple-400 font-semibold">+1 año Desarrollando.</span> 
-                     Con aprendizaje constante y pasion por la tecnologia.
-                     Orientado 100% a la demanda del cliente y las soluciones eficientes.
+                    <p class="text-lg text-gray-300 leading-relaxed">
+                    <span class="text-purple-400 font-semibold">{{ __('messages.hero.subtitle.color') }}</span>
+                    {{ __('messages.hero.subtitle') }}
                 </p>
 
                 <!--
@@ -243,11 +266,13 @@
                 </div> -->
 
                 <div class="flex gap-4 pt-4">
-                    <a href="https://www.linkedin.com/in/lcebreiros/" class="w-12 h-12 flex items-center justify-center bg-purple-600/20 hover:bg-purple-600 rounded-lg transition-all duration-300 transform hover:scale-110">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                    <a href="https://www.linkedin.com/in/lcebreiros/" class="flex items-center gap-3 px-4 py-2 bg-purple-600/10 hover:bg-purple-600/20 rounded-lg transition-all duration-300 transform hover:scale-105">
+                        <svg class="w-5 h-5 text-purple-300" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                        <span class="hidden sm:inline text-sm text-purple-200 font-medium">LinkedIn</span>
                     </a>
-                    <a href="https://github.com/Lcebreiros" class="w-12 h-12 flex items-center justify-center bg-gray-800/50 hover:bg-gray-700 rounded-lg transition-all duration-300 transform hover:scale-110">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    <a href="https://github.com/Lcebreiros" class="flex items-center gap-3 px-4 py-2 bg-gray-900/50 hover:bg-gray-800 rounded-lg transition-all duration-300 transform hover:scale-105">
+                        <svg class="w-5 h-5 text-gray-200" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                        <span class="hidden sm:inline text-sm text-gray-200 font-medium">GitHub</span>
                     </a>
                 </div>
             </div>
@@ -255,10 +280,10 @@
             <!-- Columna Derecha - Foto -->
             <div class="order-1 md:order-2 flex justify-center">
     <div class="relative">
-        <div class="w-80 h-80 rounded-full bg-gradient-to-br from-purple-600 via-pink-600 to-purple-800 p-2 animate-gradient shadow-2xl shadow-purple-900/50">
+    <div class="w-full max-w-xs md:max-w-md lg:max-w-lg aspect-square rounded-full bg-gradient-to-br from-purple-600 via-pink-600 to-purple-800 p-2 animate-gradient shadow-2xl shadow-purple-900/50">
             <div class="w-full h-full rounded-full bg-[#1a0b2e] overflow-hidden">
                 <!-- REEMPLAZA ESTA LÍNEA CON TU FOTO -->
-                <img src="img/mi-foto.jpg" alt="Leandro Cebreiros" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700">
+                <img src="images/foto.jpg" alt="Leandro Cebreiros" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700">
                 
                 <!-- COMENTADO: Placeholder SVG (eliminar cuando tengas tu foto) -->
                 <!-- <div class="w-full h-full flex items-center justify-center">
@@ -280,9 +305,9 @@
     <div class="max-w-7xl mx-auto">
         <div class="text-center mb-16">
             <h2 class="text-4xl md:text-5xl font-bold mb-4">
-                Proyectos <span class="bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">Destacados</span>
+                {{ __('messages.proyects.title') }} <span class="bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">{{ __('messages.proyects.title.color') }}</span>
             </h2>
-            <p class="text-gray-400 text-lg">Algunos de mis trabajos más recientes</p>
+            <p class="text-gray-400 text-lg">{{ __('messages.proyects.description') }}</p>
         </div>
         
         <div class="w-full flex justify-center">
@@ -310,13 +335,14 @@
                     </div>
                     <div class="p-6">
                         <h3 class="text-xl font-bold mb-3">Gestior</h3>
-                        <p class="text-gray-400 mb-4 text-sm leading-relaxed">Herramienta de gestión económica para comercios y empresas. Permite administrar sucursales, empleados, productos, gastos, pedidos, pagos y stock desde un solo panel intuitivo.</p>
+                        <p class="text-gray-400 mb-4 text-sm leading-relaxed">Herramienta de gestión económica para comercios y empresas. Permite administrar sucursales y empleados (con un sistema de roles en cascada usando spatie y usuarios relacionales en DB), productos, gastos, pedidos, pagos y stock desde un solo panel intuitivo.</p>
                         <div class="flex flex-wrap gap-2 mb-6">
                             <span class="px-3 py-1 bg-purple-900/30 text-purple-300 text-xs rounded-full border border-purple-700/50">Laravel 12</span>
                             <span class="px-3 py-1 bg-purple-900/30 text-purple-300 text-xs rounded-full border border-purple-700/50">SQL</span>
                             <span class="px-3 py-1 bg-purple-900/30 text-purple-300 text-xs rounded-full border border-purple-700/50">Livewire</span>
                             <span class="px-3 py-1 bg-purple-900/30 text-purple-300 text-xs rounded-full border border-purple-700/50">Fortify</span>
                             <span class="px-3 py-1 bg-purple-900/30 text-purple-300 text-xs rounded-full border border-purple-700/50">AWS</span>
+                            <span class="px-3 py-1 bg-purple-900/30 text-purple-300 text-xs rounded-full border border-purple-700/50">Spatie</span>
                         </div>
                     </div>
                 </div>
@@ -367,9 +393,9 @@
     <div class="max-w-7xl mx-auto">
         <div class="text-center mb-16">
             <h2 class="text-4xl md:text-5xl font-bold mb-4">
-                Tecnologías & <span class="bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">Herramientas</span>
+                {{ __('messages.skills.title') }} <span class="bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">{{ __('messages.skills.title.color') }}</span>
             </h2>
-            <p class="text-gray-400 text-lg">Mi stack tecnológico actual</p>
+            <p class="text-gray-400 text-lg">{{ __('messages.skills.description') }}</p>
         </div>
 
         <div class="grid gap-8 md:grid-cols-3">
@@ -383,7 +409,7 @@
                         </svg>
                     </div>
                 </div>
-                <h3 class="text-xl font-bold mb-6 text-white text-center">Trabajo con</h3>
+                <h3 class="text-xl font-bold mb-6 text-white text-center">{{ __('messages.skills.working') }}</h3>
                 <div class="grid grid-cols-5 gap-6 items-center justify-items-center">
                     <div class="flex flex-col items-center gap-2 group/item">
                         <div class="relative">
@@ -436,7 +462,7 @@
                         </svg>
                     </div>
                 </div>
-                <h3 class="text-xl font-bold mb-6 text-white text-center">Aprendiendo</h3>
+                <h3 class="text-xl font-bold mb-6 text-white text-center">{{ __('messages.skills.learning') }}</h3>
                 <div class="grid grid-cols-4 gap-6 items-center justify-items-center">
                     <div class="flex flex-col items-center gap-2 group/item">
                         <div class="relative">
@@ -482,7 +508,7 @@
                         </svg>
                     </div>
                 </div>
-                <h3 class="text-xl font-bold mb-6 text-white text-center">Herramientas</h3>
+                <h3 class="text-xl font-bold mb-6 text-white text-center">{{ __('messages.skills.tools') }}</h3>
                 <div class="grid grid-cols-4 gap-6 items-center justify-items-center">
                     <div class="flex flex-col items-center gap-2 group/item">
                         <div class="relative">
@@ -561,71 +587,51 @@
 <section id="sobre-mi" class="min-h-screen flex items-center py-20 px-4 section-reveal">
     <div class="max-w-6xl mx-auto w-full">
         <div class="text-center mb-12">
-            <h2 class="text-4xl md:text-5xl font-bold mb-4">Sobre <span class="bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">Mí</span></h2>
-            <p class="text-gray-400 text-lg">Desarrollador apasionado por crear soluciones efectivas</p>
+            <h2 class="text-4xl md:text-5xl font-bold mb-4">{{ __('messages.sobre.titulo') }} <span class="bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">{{ __('messages.sobre.titulo.color') }}</span></h2>
+            <p class="text-gray-400 text-lg">{{ __('messages.sobre.descripcion') }}</p>
         </div>
 
         <div class="grid md:grid-cols-2 gap-8 items-start">
             
-            <!-- Columna Izquierda: Foto -->
-            <div class="flex justify-center">
-                <div class="relative group w-full max-w-sm">
-                    <div class="w-full aspect-[3/4] rounded-xl bg-gradient-to-br from-purple-600 to-pink-600 p-[2px]">
-                        <div class="w-full h-full rounded-xl bg-[#1a0b2e] overflow-hidden">
-                            <!-- REEMPLAZA CON TU IMAGEN -->
-                            <img src="ruta/a/tu/foto.jpg" alt="Leandro Cebreiros" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                            
-                            <!-- Placeholder mientras subes tu foto -->
-                            <!-- <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#1a0b2e] to-[#2d1b4e]">
-                                <svg class="w-24 h-24 text-purple-400/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                                </svg>
-                            </div> -->
-                        </div>
-                    </div>
-                </div>
+            <!-- Columna Izquierda: Bio -->
+            <div class="space-y-3 text-gray-300 text-base leading-relaxed">
+                        <p>
+                            <span class="text-purple-400 font-semibold">{{ __('messages.sobre.p1.color') }}</span>{{ __('messages.sobre.p1') }}
+                        </p>
+                        <p>
+                            {{ __('messages.sobre.p2') }}
+                        </p>
+                        <p>
+                            {{ __('messages.sobre.p3') }}
+                        </p>
             </div>
 
-            <!-- Columna Derecha: Contenido Compacto -->
-            <div class="space-y-5">
-                
-                <!-- Bio Breve -->
-                <div class="space-y-3 text-gray-300 text-sm leading-relaxed">
-                        <p>
-                            <span class="text-purple-400 font-semibold">1+ años Desarrollando</span> de manera autonoma y autodidacta complementada con cursos para expandir mi conocimiento, contando ya con proyectos destinados a cliente y producción.
-                        </p>
-                        <p>
-                            Gracias a esos proyectos y a animarme a desarrollar de manera autonoma para clientes, pude adquirir el conocimiento que me permite pensar las maneras mas eficientes de cubrir los requerimientos y deseos del cliente, muchas veces, itentando superar sus espectativas y guiarlos dentro de sus necesidades.
-                        </p>
-                        <p>
-                            Disfruto plenamente el proceso de desarrollo, el poder de recibir una idea o un proyecto y verlo cobrar vida. Como un proyecto nos conduce a mas constantemente siempre superando la idea original. Aprendiendo y creciendo en el camino.
-                        </p>
-                </div>
-
+            <!-- Columna Derecha: Habilidades y Formación -->
+            <div class="space-y-6">
                 <div class="h-px bg-gradient-to-r from-transparent via-purple-500/50 to-transparent"></div>
 
                 <!-- Soft Skills -->
                 <div>
                     <h3 class="text-base font-bold text-white mb-3 flex items-center gap-2">
                         <span class="w-1 h-4 bg-gradient-to-b from-purple-600 to-pink-600 rounded"></span>
-                        Habilidades Blandas
+                        {{ __('messages.sobre.soft.skills') }}
                     </h3>
                     <div class="grid grid-cols-2 gap-2">
                         <div class="flex items-center gap-2 text-xs text-gray-300">
                             <div class="w-1.5 h-1.5 rounded-full bg-purple-500"></div>
-                            <span>Trabajo en equipo</span>
+                            <span>{{ __('messages.sobre.soft.skill1') }}</span>
                         </div>
                         <div class="flex items-center gap-2 text-xs text-gray-300">
                             <div class="w-1.5 h-1.5 rounded-full bg-purple-500"></div>
-                            <span>Resolución de problemas</span>
+                            <span>{{ __('messages.sobre.soft.skill2') }}</span>
                         </div>
                         <div class="flex items-center gap-2 text-xs text-gray-300">
                             <div class="w-1.5 h-1.5 rounded-full bg-purple-500"></div>
-                            <span>Gestión de tiempo</span>
+                            <span>{{ __('messages.sobre.soft.skill3') }}</span>
                         </div>
                         <div class="flex items-center gap-2 text-xs text-gray-300">
                             <div class="w-1.5 h-1.5 rounded-full bg-purple-500"></div>
-                            <span>Adaptabilidad</span>
+                            <span>{{ __('messages.sobre.soft.skill4') }}</span>
                         </div>
                     </div>
                 </div>
@@ -636,33 +642,29 @@
                 <div>
                     <h3 class="text-base font-bold text-white mb-3 flex items-center gap-2">
                         <span class="w-1 h-4 bg-gradient-to-b from-blue-600 to-cyan-600 rounded"></span>
-                        Formación
+                        {{ __('messages.sobre.training') }}
                     </h3>
-                    <div class="space-y-3">
-                        <div class="group">
-                            <div class="flex items-start justify-between gap-3">
-                                <div class="flex-1">
-                                    <h4 class="font-semibold text-white text-sm group-hover:text-purple-400 transition-colors">Master en Desarrollo web PHP Laravel</h4>
-                                    <p class="text-purple-400 text-xs mt-0.5">Udemy Academy</p>
-                                </div>
-                                <span class="text-xs text-gray-500 font-medium whitespace-nowrap">2024</span>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between gap-3 bg-[#0f0716]/40 p-3 rounded-lg border border-purple-800/30">
+                            <div>
+                                <h4 class="font-semibold text-white text-sm">Master en Desarrollo web PHP Laravel</h4>
+                                <p class="text-purple-400 text-xs mt-1">Udemy Academy</p>
                             </div>
+                            <span class="inline-flex items-center px-3 py-1 text-xs font-medium bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full">2024</span>
                         </div>
 
-                        <div class="group">
-                            <div class="flex items-start justify-between gap-3">
-                                <div class="flex-1">
-                                    <h4 class="font-semibold text-white text-sm group-hover:text-blue-400 transition-colors">Desarrollo Back-End Java</h4>
-                                    <p class="text-blue-400 text-xs mt-0.5">TalentoTech BA</p>
-                                </div>
-                                <span class="text-xs text-gray-500 font-medium whitespace-nowrap">En curso</span>
+                        <div class="flex items-center justify-between gap-3 bg-[#0f0716]/40 p-3 rounded-lg border border-purple-800/30">
+                            <div>
+                                <h4 class="font-semibold text-white text-sm">Desarrollo Back-End Java</h4>
+                                <p class="text-blue-400 text-xs mt-1">TalentoTech BA</p>
                             </div>
+                            <span class="inline-flex items-center px-3 py-1 text-xs font-medium bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-full">En curso</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="h-px bg-gradient-to-r from-transparent via-purple-500/50 to-transparent"></div>
-
+                
             </div>
         </div>
     </div>
@@ -672,8 +674,8 @@
 <section id="contacto" class="min-h-screen flex items-center py-20 px-4 bg-[#1a0b2e]/50 section-reveal">
     <div class="max-w-6xl mx-auto w-full">
         <div class="text-center mb-16">
-            <h2 class="text-4xl md:text-5xl font-bold mb-4">Trabajemos <span class="bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">Juntos</span></h2>
-            <p class="text-gray-400 text-lg">¿Tienes un proyecto en mente? Hablemos</p>
+            <h2 class="text-4xl md:text-5xl font-bold mb-4">{{ __('messages.contact.title') }} <span class="bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">{{ __('messages.contact.title.color') }}</span></h2>
+            <p class="text-gray-400 text-lg">{{ __('messages.contact.subtitle') }}</p>
         </div>
 
         <div class="grid md:grid-cols-2 gap-8">
@@ -682,28 +684,28 @@
             <div class="bg-gradient-to-br from-[#1a0b2e] to-[#2d1b4e] p-8 rounded-2xl border border-purple-800/50 shadow-2xl shadow-purple-900/30 hover:border-purple-600 transition-all duration-500 flex flex-col h-full">
                 <form class="space-y-5 flex-1 flex flex-col">
                     <div>
-                        <label for="nombre" class="block text-sm font-medium mb-2 text-purple-300">Nombre</label>
+                        <label for="nombre" class="block text-sm font-medium mb-2 text-purple-300">{{ __('messages.contact.form.nombre') }}</label>
                         <input type="text" id="nombre" name="nombre" required
                             class="w-full px-4 py-3 bg-[#2d1b4e] border border-purple-700/50 rounded-lg focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 transition placeholder-gray-500"
                             placeholder="Tu nombre">
                     </div>
 
                     <div>
-                        <label for="email" class="block text-sm font-medium mb-2 text-purple-300">Email</label>
+                        <label for="email" class="block text-sm font-medium mb-2 text-purple-300">{{ __('messages.contact.form.email') }}</label>
                         <input type="email" id="email" name="email" required
                             class="w-full px-4 py-3 bg-[#2d1b4e] border border-purple-700/50 rounded-lg focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 transition placeholder-gray-500"
                             placeholder="tu@email.com">
                     </div>
 
                     <div>
-                        <label for="asunto" class="block text-sm font-medium mb-2 text-purple-300">Asunto</label>
+                        <label for="asunto" class="block text-sm font-medium mb-2 text-purple-300">{{ __('messages.contact.form.asunto') }}</label>
                         <input type="text" id="asunto" name="asunto" required
                             class="w-full px-4 py-3 bg-[#2d1b4e] border border-purple-700/50 rounded-lg focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 transition placeholder-gray-500"
                             placeholder="¿De qué quieres hablar?">
                     </div>
 
                     <div class="flex-1 flex flex-col">
-                        <label for="mensaje" class="block text-sm font-medium mb-2 text-purple-300">Mensaje</label>
+                        <label for="mensaje" class="block text-sm font-medium mb-2 text-purple-300">{{ __('messages.contact.form.mensaje') }}</label>
                         <textarea id="mensaje" name="mensaje" required
                             class="w-full px-4 py-3 bg-[#2d1b4e] border border-purple-700/50 rounded-lg focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 transition resize-none placeholder-gray-500 flex-1"
                             placeholder="Cuéntame sobre tu proyecto..."></textarea>
@@ -711,7 +713,7 @@
 
                     <button type="submit" 
                         class="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg shadow-purple-900/50 flex items-center justify-center gap-2">
-                        <span>Enviar Mensaje</span>
+                        <span>{{ __('messages.contact.form.enviar') }}</span>
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
                         </svg>
@@ -724,23 +726,20 @@
                 
                 <!-- Disponibilidad -->
                 <div class="bg-gradient-to-br from-[#1a0b2e] to-[#2d1b4e] p-6 rounded-2xl border border-green-800/50 hover:border-green-600 transition-all duration-500 group">
-                    <div class="flex items-start gap-4">
+                    <div class="flex items-center gap-4">
                         <div class="w-12 h-12 rounded-xl bg-green-600/20 flex items-center justify-center group-hover:bg-green-600 transition-all flex-shrink-0">
                             <svg class="w-6 h-6 text-green-400 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                             </svg>
                         </div>
                         <div>
-                            <h3 class="text-xl font-bold text-white mb-2 flex items-center gap-2">
-                                Disponible para trabajar
+                            <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                                {{ __('messages.available') }}
                                 <span class="relative flex h-3 w-3">
                                     <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                                     <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
                                 </span>
                             </h3>
-                            <p class="text-gray-400 text-sm leading-relaxed">
-                                Actualmente disponible para proyectos trabajar en relacion de dependencia y proyectos freelance.
-                            </p>
                         </div>
                     </div>
                 </div>
@@ -755,21 +754,21 @@
                             </svg>
                         </div>
                         <div>
-                            <h3 class="text-xl font-bold text-white mb-2">Ubicación</h3>
+                            <h3 class="text-xl font-bold text-white mb-2">{{ __('messages.location.title') }}</h3>
                             <p class="text-gray-400 text-sm leading-relaxed mb-2">
-                                Lomas de Zamora, Buenos Aires, Argentina
+                                {{ __('messages.location.city') }}
                             </p>
                             <p class="text-purple-300 text-xs">
-                                 Disponible para proyectos remotos
+                                 {{ __('messages.remote') }}
                             </p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Encuéntrame en -->
-                <div class="bg-gradient-to-br from-[#1a0b2e] to-[#2d1b4e] p-6 rounded-2xl border border-pink-800/50 hover:border-pink-600 transition-all duration-500 flex-1 flex flex-col justify-center">
-                    <h3 class="text-xl font-bold text-white mb-6 text-center">Encuéntrame en</h3>
-                    <div class="flex justify-center gap-4">
+                <div class="bg-gradient-to-br from-[#1a0b2e] to-[#2d1b4e] p-4 rounded-2xl border border-pink-800/50 hover:border-pink-600 transition-all duration-500 flex flex-col items-center">
+                    <h3 class="text-xl font-bold text-white mb-4 text-center">{{ __('messages.socials') }}</h3>
+                    <div class="flex justify-center gap-4 items-center">
                         <a href="https://www.linkedin.com/in/lcebreiros/" target="_blank" rel="noopener noreferrer" 
                            class="w-12 h-12 flex items-center justify-center bg-purple-600/20 hover:bg-purple-600 rounded-lg transition-all duration-300 transform hover:scale-110" title="LinkedIn">
                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -966,11 +965,11 @@
             if (project) {
                 showProjectInModal(project);
                 
-                modal.classList.remove('hidden');
-                setTimeout(() => {
-                    modal.classList.add('opacity-100');
-                    modalContent.classList.add('scale-100');
-                }, 50);
+                modal.classList.remove('pointer-events-none');
+                requestAnimationFrame(() => {
+                    modal.classList.remove('opacity-0');
+                    modalContent.classList.remove('scale-90', 'opacity-0');
+                });
             }
         }
 
@@ -1047,57 +1046,81 @@
                     currentImageIndex = 0; // asegurar que arranque en la primera imagen
 
                     modalContent.innerHTML = `
-                        <div class="bg-[#1a0b2e] rounded-xl overflow-hidden relative">
-                            <div class="relative h-56 sm:h-72 md:h-96 bg-gradient-to-br from-purple-600 to-pink-600">
-                                <div id="projectImages" class="w-full h-full relative">
-                                    <img src="${project.images ? project.images[0] : project.image}" alt="${project.title}" class="w-full h-full object-cover">
-                                    <div class="absolute inset-0 bg-black/50"></div>
-
+                        <div class="bg-[#0a0612] rounded-xl overflow-hidden relative shadow-2xl shadow-purple-900/20">
+                            <!-- Gallery Section -->
+                            <div class="relative bg-gradient-to-br from-[#0f0525] to-[#1a0b2e]">
+                                <div id="projectImages" class="w-full min-h-[300px] sm:min-h-[400px] relative flex items-center justify-center p-4">
+                                    <img src="${project.images ? project.images[0] : project.image}" 
+                                         alt="${project.title}" 
+                                         class="max-w-full max-h-full object-contain rounded-lg shadow-xl">
+                                    
                                     ${project.images && project.images.length > 1 ? `
-                                        <button onclick="prevImage()" class="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-black/50 hover:bg-black text-white rounded-full transition-colors">
-                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <button onclick="prevImage()" 
+                                                aria-label="Anterior" 
+                                                class="absolute left-6 top-1/2 -translate-y-1/2 p-3 bg-black/50 hover:bg-black/80 text-white/90 hover:text-white rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transform hover:scale-105">
+                                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                                             </svg>
                                         </button>
-                                        <button onclick="nextImage()" class="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-black/50 hover:bg-black text-white rounded-full transition-colors">
-                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <button onclick="nextImage()" 
+                                                aria-label="Siguiente" 
+                                                class="absolute right-6 top-1/2 -translate-y-1/2 p-3 bg-black/50 hover:bg-black/80 text-white/90 hover:text-white rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transform hover:scale-105">
+                                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                                             </svg>
                                         </button>
-                                        <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
+
+                                        <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-3">
                                             ${project.images.map((_, index) => `
-                                                <button onclick="showImage(${index})" class="w-2 h-2 rounded-full bg-white/50 hover:bg-white transition-colors"></button>
+                                                <button onclick="showImage(${index})" 
+                                                        aria-label="Ver imagen ${index+1}" 
+                                                        class="w-2 h-2 rounded-full bg-white/40 hover:bg-white transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-400 transform hover:scale-125"></button>
                                             `).join('')}
                                         </div>
                                     ` : ''}
                                 </div>
                             </div>
 
-                            <button onclick="closeProjectModal()" class="absolute top-4 right-4 p-2 bg-black/50 hover:bg-black text-white rounded-full transition-colors">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <!-- Content Section -->
+                            <div class="p-6 sm:p-8">
+                                <h2 class="text-2xl sm:text-3xl font-bold mb-4 text-white">${project.title}</h2>
+                                
+                                <div class="prose prose-invert max-w-none text-sm sm:text-base text-gray-300 mb-6">
+                                    ${project.description}
+                                </div>
+
+                                <div class="flex flex-wrap gap-2 mb-6">
+                                    ${project.technologies.map(tech => `
+                                        <span class="px-3 py-1.5 bg-[#150d28] text-purple-300 text-xs sm:text-sm rounded-full border border-purple-900/30 hover:border-purple-500/50 transition-colors duration-300">${tech}</span>
+                                    `).join('')}
+                                </div>
+
+                                <div class="flex flex-col sm:flex-row gap-4">
+                                    <a href="${project.repoUrl}" target="_blank" 
+                                       class="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-[#150d28] hover:bg-purple-900/20 text-purple-300 hover:text-purple-200 rounded-xl transition-all duration-300 text-sm font-medium border border-purple-900/30 hover:border-purple-500/50 transform hover:-translate-y-0.5">
+                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                                        </svg>
+                                        Ver Código Fuente
+                                    </a>
+                                    <a href="${project.title === 'Cuanto Sabe' ? '/cuanto-sabe-demo' : project.demoUrl}" target="_blank"
+                                       class="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600/20 to-pink-600/20 hover:from-purple-600/30 hover:to-pink-600/30 text-purple-200 rounded-xl transition-all duration-300 text-sm font-medium border border-purple-500/30 hover:border-pink-500/50 transform hover:-translate-y-0.5">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                        </svg>
+                                        Ver Demo
+                                    </a>
+                                </div>
+                            </div>
+
+                            <button onclick="closeProjectModal()" 
+                                    class="absolute top-4 right-4 p-2.5 bg-black/50 hover:bg-black/80 text-white/90 hover:text-white rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transform hover:scale-105">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                 </svg>
                             </button>
-
-                            <div class="p-4 sm:p-6 md:p-8">
-                                <h2 class="text-xl sm:text-2xl md:text-3xl font-bold mb-4">${project.title}</h2>
-                                <div class="prose prose-invert max-w-none mb-6 text-sm sm:text-base">
-                                    ${project.description}
-                                </div>
-                                <div class="flex flex-wrap gap-2 mb-6">
-                                    ${project.technologies.map(tech => `
-                                        <span class="px-2 sm:px-3 py-1 bg-purple-900/30 text-purple-300 text-xs sm:text-sm rounded-full border border-purple-700/50">${tech}</span>
-                                    `).join('')}
-                                </div>
-                                <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                                    <a href="${project.repoUrl}" target="_blank" class="flex items-center justify-center gap-2 py-2.5 sm:py-3 bg-purple-600/20 hover:bg-purple-600 text-purple-400 hover:text-white rounded-lg transition-all duration-300 text-xs sm:text-sm font-medium">Ver Código Fuente</a>
-                                    <a href="${project.demoUrl}" target="_blank" class="flex-1 flex items-center justify-center gap-2 py-2.5 sm:py-3 bg-pink-600/20 hover:bg-pink-600 text-pink-400 hover:text-white rounded-lg transition-all duration-300 text-xs sm:text-sm font-medium">Ver Demo</a>
-                                </div>
-                            </div>
                         </div>
-                    `;
-
-                    // Actualizar indicadores visuales al abrir
+                    `;                    // Actualizar indicadores visuales al abrir
                     setTimeout(() => updateImageIndicators(), 50);
                 }
 
@@ -1107,12 +1130,11 @@
             const modal = document.getElementById('projectModal');
             const modalContent = document.getElementById('modalContent');
             
-            modal.classList.remove('opacity-100');
-            modalContent.classList.remove('scale-100');
+            modal.classList.add('pointer-events-none');
+            modalContent.classList.add('scale-90', 'opacity-0');
+            modal.classList.add('opacity-0');
             
-            setTimeout(() => {
-                modal.classList.add('hidden');
-            }, 300);
+            // No es necesario ocultar el modal ya que usamos pointer-events-none
         }
 
         // Funciones del carrusel de imágenes
@@ -1149,33 +1171,35 @@
             
             const imageContainer = document.getElementById('projectImages');
             if (!imageContainer) return;
-            
             const image = imageContainer.querySelector('img');
             if (image) {
+                // Para evitar salto brusco, cambiamos src y aseguramos estilo
                 image.src = project.images[currentImageIndex];
+                image.classList.remove('opacity-0');
+                image.classList.add('opacity-100');
             }
         }
 
         function updateImageIndicators() {
             const project = projectsData[currentProjectId];
             if (!project.images) return;
-            
-            const indicators = document.querySelectorAll('#projectImages .rounded-full');
+            const indicators = document.querySelectorAll('#projectImages button.w-2');
             indicators.forEach((indicator, index) => {
                 if (index === currentImageIndex) {
-                    indicator.classList.remove('bg-white/50');
-                    indicator.classList.add('bg-white');
+                    indicator.classList.remove('bg-white/40');
+                    indicator.classList.add('bg-white', 'scale-125');
                 } else {
-                    indicator.classList.add('bg-white/50');
-                    indicator.classList.remove('bg-white');
+                    indicator.classList.add('bg-white/40');
+                    indicator.classList.remove('bg-white', 'scale-125');
                 }
             });
         }
     </script>
 
     <!-- Modal de Proyecto -->
-    <div id="projectModal" class="fixed inset-0 z-50 flex items-start justify-center p-4 overflow-y-auto bg-black/90 opacity-0 transition-opacity duration-300 hidden">
-        <div id="modalContent" class="transform scale-95 transition-transform duration-300 w-full max-w-4xl my-4 sm:my-6">
+    <div id="projectModal" class="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto overflow-x-hidden p-4 sm:p-6 opacity-0 pointer-events-none transition-all duration-300">
+        <div class="fixed inset-0 bg-black/90 backdrop-blur-sm"></div>
+        <div id="modalContent" class="relative w-full max-w-4xl mx-auto my-8 transform transition-all duration-500 scale-90 opacity-0">
             <!-- El contenido del modal se insertará aquí dinámicamente -->
         </div>
     </div>
