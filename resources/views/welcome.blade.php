@@ -174,6 +174,12 @@
         transform: translateY(-8px) scale(1.05);
     }
 
+    /* Ajuste del foco de la foto (mejor centrado en mobile) */
+    .hero-photo img { object-position: 50% 38%; }
+    @media (min-width: 768px) { /* md */
+      .hero-photo img { object-position: 50% 50%; }
+    }
+
     /* Puntos de carga animados (opcional para el overlay) */
     .loading-dots { display:inline-flex; gap:.25rem; margin-left:.25rem; }
     .loading-dots span { width:6px; height:6px; background:#fff; border-radius:50%; animation:bounce-dot 1.4s infinite ease-in-out; }
@@ -410,9 +416,9 @@
             <div class="order-1 md:order-2 flex justify-center">
     <div class="relative">
     <div class="w-full max-w-xs md:max-w-md lg:max-w-lg aspect-square rounded-full bg-gradient-to-br from-purple-600 via-pink-600 to-purple-800 p-2 animate-gradient shadow-2xl shadow-purple-900/50">
-            <div class="w-full h-full rounded-full bg-[#1a0b2e] overflow-hidden">
+            <div class="w-full h-full rounded-full bg-[#1a0b2e] overflow-hidden hero-photo">
                 <!-- REEMPLAZA ESTA LÍNEA CON TU FOTO -->
-                <img src="images/leandro-cebreiros.png" alt="Leandro Cebreiros" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700">
+                <img src="images/leandro-cebreiros.png" alt="Leandro Cebreiros" class="w-full h-full object-cover object-center hover:scale-110 transition-transform duration-700">
                 
                 <!-- COMENTADO: Placeholder SVG (eliminar cuando tengas tu foto) -->
                 <!-- <div class="w-full h-full flex items-center justify-center">
