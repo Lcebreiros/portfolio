@@ -174,8 +174,10 @@
         transform: translateY(-8px) scale(1.05);
     }
 
-    /* Ajuste del foco de la foto (mejor centrado en mobile) */
-    .hero-photo img { object-position: 50% 30%; }
+    /* Ajuste del foco de la foto (mobile: subimos fuerte el foco) */
+    @media (max-width: 767px) {
+      .hero-photo img { object-position: 50% 10%; }
+    }
     @media (min-width: 768px) { /* md */
       .hero-photo img { object-position: 50% 50%; }
     }
