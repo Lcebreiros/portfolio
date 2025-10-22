@@ -13,6 +13,48 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+  /* --- TRANSICIÓN DE IDIOMA (suave, difuminada) --- */
+  #langTransitionOverlay{
+    position:fixed; inset:0; z-index:9999; pointer-events:none;
+    background:linear-gradient(180deg, rgba(15,5,37,.92) 0%, rgba(26,11,46,.92) 100%);
+    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    display:grid; place-items:center;
+    opacity:0; transition:opacity .45s ease;
+  }
+  /* Velo sutil para evitar corte del cambio */
+  #langTransitionOverlay::before{
+    content:""; position:absolute; inset:-10vh 0; pointer-events:none;
+    background:radial-gradient(120% 120% at 30% 50%, rgba(15,5,37,.35) 0%, rgba(15,5,37,.25) 40%, rgba(15,5,37,.15) 70%, rgba(15,5,37,0) 100%);
+    opacity:0; transition:opacity .9s ease;
+  }
+  /* Banda de barrido con bordes difuminados y blur del fondo */
+  #langTransitionOverlay .sweep{ display:none !important; }
+  /* Pre-paint ON: mostramos overlay y barrido recorre la pantalla */
+  html[data-lang-transition="on"] #langTransitionOverlay{ opacity:1; pointer-events:auto; }
+  html[data-lang-transition="on"] #langTransitionOverlay::before{ opacity:1; }
+  /* Sin barrido en modo pantalla de carga */
+  /* Salida: desvanecer overlay + sobrepasar barrido para continuidad */
+  html.lang-exit #langTransitionOverlay{ opacity:0; }
+  .transition-content{ text-align:center; }
+  .transition-text{ font-size:1.5rem; font-weight:700; color:#fff; letter-spacing:.05em; text-shadow:0 2px 10px rgba(0,0,0,.3); }
+  .lang-spinner{ width:64px; height:64px; margin:0 auto 1.5rem; animation:spin 1s linear infinite; color:#fff; }
+  @keyframes spin{ from{transform:rotate(0)} to{transform:rotate(360deg)}}
+  @media (prefers-reduced-motion:reduce){
+    #langTransitionOverlay{ transition:none; }
+    #langTransitionOverlay .sweep{ transition:none; backdrop-filter:none; -webkit-backdrop-filter:none; }
+  }
+</style>
+
+<script>
+  /* Marcar el HTML ANTES del primer paint si venimos de un cambio de idioma */
+  try {
+    if (sessionStorage.getItem('langTransitionActive') === 'true') {
+      document.documentElement.setAttribute('data-lang-transition','on');
+    }
+  } catch(e){}
+</script>
+
+    <style>
         :root{ --font-ui: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; --font-name: 'Poppins', system-ui; }
         body{ font-family: var(--font-ui); }
         @keyframes float {
@@ -71,8 +113,95 @@
         }
         
     </style>
+    <style>
+    :root{ --font-ui: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; --font-name: 'Poppins', system-ui; }
+    body{ font-family: var(--font-ui); }
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+    }
+    
+    @keyframes gradient {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+    }
+    
+    .animate-float {
+        animation: float 6s ease-in-out infinite;
+    }
+    
+    .animate-gradient {
+        background-size: 200% 200%;
+        animation: gradient 8s ease infinite;
+    }
+    
+    .typing-cursor {
+        animation: blink 1s infinite;
+        color: #a855f7;
+    }
+    
+    @keyframes blink {
+        0%, 49% { opacity: 1; }
+        50%, 100% { opacity: 0; }
+    }
+    
+    html {
+        scroll-behavior: smooth;
+    }
+
+    /* Compensa la altura del navbar fijo al hacer scroll a anchors (h-16 ≈ 64px) */
+    section[id] { scroll-margin-top: 64px; }
+
+    /* Hero name styling */
+    .hero-name{
+        font-family: var(--font-name);
+        letter-spacing: -0.02em;
+        line-height: 1;
+    }
+    
+    .section-reveal {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    
+    .section-reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .tech-card:hover {
+        transform: translateY(-8px) scale(1.05);
+    }
+
+    /* Puntos de carga animados (opcional para el overlay) */
+    .loading-dots { display:inline-flex; gap:.25rem; margin-left:.25rem; }
+    .loading-dots span { width:6px; height:6px; background:#fff; border-radius:50%; animation:bounce-dot 1.4s infinite ease-in-out; }
+    .loading-dots span:nth-child(1){ animation-delay:-.32s }
+    .loading-dots span:nth-child(2){ animation-delay:-.16s }
+    @keyframes bounce-dot { 0%,80%,100%{ transform:scale(0); opacity:.5 } 40%{ transform:scale(1); opacity:1 } }
+
+    @media (max-width: 640px) {
+        .transition-text { font-size: 1.25rem; }
+        .lang-spinner { width: 48px; height: 48px; }
+    }
+    </style>
 </head>
 <body class="bg-gradient-to-br from-[#0f0525] via-[#1a0b2e] to-[#0f0525] text-gray-100">
+<div id="langTransitionOverlay" aria-hidden="true">
+  <div class="sweep" aria-hidden="true"></div>
+  <div class="transition-content">
+    <svg class="lang-spinner" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="10" stroke="white" stroke-opacity="0.25" stroke-width="3"/>
+      <path stroke="white" stroke-linecap="round" d="M4 12a8 8 0 0 1 8-8" />
+    </svg>
+    <div class="transition-text">
+      <span id="transitionLangText">Cambiando idioma</span>
+      <span class="loading-dots" aria-hidden="true"><span></span><span></span><span></span></span>
+    </div>
+  </div>
+</div>
+
     
     <!-- Navbar Profesional y Minimalista -->
 <nav id="navbar" class="fixed w-full bg-[#0f0525]/90 backdrop-blur-lg z-50 border-b border-purple-500/10 transition-all duration-300">
@@ -283,7 +412,7 @@
     <div class="w-full max-w-xs md:max-w-md lg:max-w-lg aspect-square rounded-full bg-gradient-to-br from-purple-600 via-pink-600 to-purple-800 p-2 animate-gradient shadow-2xl shadow-purple-900/50">
             <div class="w-full h-full rounded-full bg-[#1a0b2e] overflow-hidden">
                 <!-- REEMPLAZA ESTA LÍNEA CON TU FOTO -->
-                <img src="images/foto.jpg" alt="Leandro Cebreiros" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700">
+                <img src="images/leandro-cebreiros.png" alt="Leandro Cebreiros" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700">
                 
                 <!-- COMENTADO: Placeholder SVG (eliminar cuando tengas tu foto) -->
                 <!-- <div class="w-full h-full flex items-center justify-center">
@@ -335,7 +464,7 @@
                     </div>
                     <div class="p-6">
                         <h3 class="text-xl font-bold mb-3">Gestior</h3>
-                        <p class="text-gray-400 mb-4 text-sm leading-relaxed">Herramienta de gestión económica para comercios y empresas. Permite administrar sucursales y empleados (con un sistema de roles en cascada usando spatie y usuarios relacionales en DB), productos, gastos, pedidos, pagos y stock desde un solo panel intuitivo.</p>
+                        <p class="text-gray-400 mb-4 text-sm leading-relaxed">{{ __('messages.proyects.gestior') }}</p>
                         <div class="flex flex-wrap gap-2 mb-6">
                             <span class="px-3 py-1 bg-purple-900/30 text-purple-300 text-xs rounded-full border border-purple-700/50">Laravel 12</span>
                             <span class="px-3 py-1 bg-purple-900/30 text-purple-300 text-xs rounded-full border border-purple-700/50">SQL</span>
@@ -370,7 +499,7 @@
                     </div>
                     <div class="p-6">
                         <h3 class="text-xl font-bold mb-3">Cuanto Sabe</h3>
-                        <p class="text-gray-400 mb-4 text-sm leading-relaxed">Juego web para streaming con overlay interactivo, panel de control para host, participación de invitados y público en tiempo real, y comunicación mediante websockets.</p>
+                        <p class="text-gray-400 mb-4 text-sm leading-relaxed">{{ __('messages.proyects.cuantosabe') }}</p>
                         <div class="flex flex-wrap gap-2 mb-6">
                             <span class="px-3 py-1 bg-purple-900/30 text-purple-300 text-xs rounded-full border border-purple-700/50">Laravel 12</span>
                             <span class="px-3 py-1 bg-purple-900/30 text-purple-300 text-xs rounded-full border border-purple-700/50">SQL</span>
@@ -454,49 +583,57 @@
             </div>
 
             <!-- APRENDIENDO -->
-            <div class="tech-card group bg-gradient-to-br from-[#1a0b2e] to-[#2d1b4e] rounded-2xl border border-blue-800/50 p-8 hover:border-blue-600 transition-all duration-500 hover:shadow-2xl hover:shadow-blue-900/50 hover:-translate-y-2">
-                <div class="flex items-center justify-center mb-6">
-                    <div class="bg-gradient-to-r from-blue-600 to-cyan-600 rounded-full p-3">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-                        </svg>
-                    </div>
-                </div>
-                <h3 class="text-xl font-bold mb-6 text-white text-center">{{ __('messages.skills.learning') }}</h3>
-                <div class="grid grid-cols-4 gap-6 items-center justify-items-center">
-                    <div class="flex flex-col items-center gap-2 group/item">
-                        <div class="relative">
-                            <div class="absolute inset-0 bg-yellow-400 rounded-lg blur-lg opacity-0 group-hover/item:opacity-50 transition-opacity duration-300"></div>
-                            <i class="skill-icon devicon-javascript-plain colored text-4xl relative z-10"></i>
-                        </div>
-                        <span class="text-xs text-gray-300 font-medium">JavaScript</span>
-                    </div>
-
-                    <div class="flex flex-col items-center gap-2 group/item">
-                        <div class="relative">
-                            <div class="absolute inset-0 bg-red-600 rounded-lg blur-lg opacity-0 group-hover/item:opacity-50 transition-opacity duration-300"></div>
-                            <i class="skill-icon devicon-java-plain colored text-4xl relative z-10"></i>
-                        </div>
-                        <span class="text-xs text-gray-300 font-medium">Java</span>
-                    </div>
-
-                    <div class="flex flex-col items-center gap-2 group/item">
-                        <div class="relative">
-                            <div class="absolute inset-0 bg-cyan-400 rounded-lg blur-lg opacity-0 group-hover/item:opacity-50 transition-opacity duration-300"></div>
-                            <i class="skill-icon devicon-react-original colored text-4xl relative z-10"></i>
-                        </div>
-                        <span class="text-xs text-gray-300 font-medium">React</span>
-                    </div>
-
-                    <div class="flex flex-col items-center gap-2 group/item">
-                        <div class="relative">
-                            <div class="absolute inset-0 bg-green-500 rounded-lg blur-lg opacity-0 group-hover/item:opacity-50 transition-opacity duration-300"></div>
-                            <i class="skill-icon devicon-nodejs-plain colored text-4xl relative z-10"></i>
-                        </div>
-                        <span class="text-xs text-gray-300 font-medium">Node</span>
-                    </div>
-                </div>
+<div class="tech-card group bg-gradient-to-br from-[#1a0b2e] to-[#2d1b4e] rounded-2xl border border-blue-800/50 p-8 hover:border-blue-600 transition-all duration-500 hover:shadow-2xl hover:shadow-blue-900/50 hover:-translate-y-2">
+    <div class="flex items-center justify-center mb-6">
+        <div class="bg-gradient-to-r from-blue-600 to-cyan-600 rounded-full p-3">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+            </svg>
+        </div>
+    </div>
+    <h3 class="text-xl font-bold mb-6 text-white text-center">{{ __('messages.skills.learning') }}</h3>
+    <div class="grid grid-cols-5 gap-6 items-center justify-items-center">
+        <div class="flex flex-col items-center gap-2 group/item">
+            <div class="relative">
+                <div class="absolute inset-0 bg-yellow-400 rounded-lg blur-lg opacity-0 group-hover/item:opacity-50 transition-opacity duration-300"></div>
+                <i class="skill-icon devicon-javascript-plain colored text-4xl relative z-10"></i>
             </div>
+            <span class="text-xs text-gray-300 font-medium">JavaScript</span>
+        </div>
+
+        <div class="flex flex-col items-center gap-2 group/item">
+            <div class="relative">
+                <div class="absolute inset-0 bg-red-600 rounded-lg blur-lg opacity-0 group-hover/item:opacity-50 transition-opacity duration-300"></div>
+                <i class="skill-icon devicon-java-plain colored text-4xl relative z-10"></i>
+            </div>
+            <span class="text-xs text-gray-300 font-medium">Java</span>
+        </div>
+
+        <div class="flex flex-col items-center gap-2 group/item">
+            <div class="relative">
+                <div class="absolute inset-0 bg-green-500 rounded-lg blur-lg opacity-0 group-hover/item:opacity-50 transition-opacity duration-300"></div>
+                <i class="skill-icon devicon-spring-plain colored text-4xl relative z-10"></i>
+            </div>
+            <span class="text-xs text-gray-300 font-medium">Spring Boot</span>
+        </div>
+
+        <div class="flex flex-col items-center gap-2 group/item">
+            <div class="relative">
+                <div class="absolute inset-0 bg-cyan-400 rounded-lg blur-lg opacity-0 group-hover/item:opacity-50 transition-opacity duration-300"></div>
+                <i class="skill-icon devicon-react-original colored text-4xl relative z-10"></i>
+            </div>
+            <span class="text-xs text-gray-300 font-medium">React</span>
+        </div>
+
+        <div class="flex flex-col items-center gap-2 group/item">
+            <div class="relative">
+                <div class="absolute inset-0 bg-green-500 rounded-lg blur-lg opacity-0 group-hover/item:opacity-50 transition-opacity duration-300"></div>
+                <i class="skill-icon devicon-nodejs-plain colored text-4xl relative z-10"></i>
+            </div>
+            <span class="text-xs text-gray-300 font-medium">Node</span>
+        </div>
+    </div>
+</div>
 
             <!-- HERRAMIENTAS -->
             <div class="tech-card group bg-gradient-to-br from-[#1a0b2e] to-[#2d1b4e] rounded-2xl border border-pink-800/50 p-8 hover:border-pink-600 transition-all duration-500 hover:shadow-2xl hover:shadow-pink-900/50 hover:-translate-y-2">
@@ -537,7 +674,10 @@
                     <div class="flex flex-col items-center gap-2 group/item">
                         <div class="relative">
                             <div class="absolute inset-0 bg-yellow-400 rounded-lg blur-lg opacity-0 group-hover/item:opacity-50 transition-opacity duration-300"></div>
-                            <i class="skill-icon devicon-linux-plain colored text-4xl relative z-10"></i>
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" 
+                                 alt="Linux" 
+                                 class="skill-icon w-10 h-10 relative z-10"
+                                 style="filter: none !important;">
                         </div>
                         <span class="text-xs text-gray-300 font-medium">Linux</span>
                     </div>
@@ -607,7 +747,7 @@
             </div>
 
             <!-- Columna Derecha: Habilidades y Formación -->
-            <div class="space-y-6">
+            <div class="space-y-6 text-[1.05em]">
                 <div class="h-px bg-gradient-to-r from-transparent via-purple-500/50 to-transparent"></div>
 
                 <!-- Soft Skills -->
@@ -678,37 +818,72 @@
             <p class="text-gray-400 text-lg">{{ __('messages.contact.subtitle') }}</p>
         </div>
 
+        @if (session('success'))
+            <div class="mb-6 rounded-xl border border-green-500/30 bg-green-500/10 text-green-300 p-4 flex items-start gap-3">
+                <svg class="w-5 h-5 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <div class="text-sm">
+                    {{ session('success') }}
+                </div>
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div class="mb-6 rounded-xl border border-red-500/30 bg-red-500/10 text-red-300 p-4 flex items-start gap-3">
+                <svg class="w-5 h-5 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636A9 9 0 105.636 18.364 9 9 0 0018.364 5.636z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01"/>
+                </svg>
+                <div class="text-sm">
+                    {{ session('error') }}
+                </div>
+            </div>
+        @endif
+
+        @if ($errors->any())
+            <div class="mb-6 rounded-xl border border-yellow-500/30 bg-yellow-500/10 text-yellow-200 p-4">
+                <div class="font-medium mb-2">Por favor corrige los siguientes errores:</div>
+                <ul class="text-sm list-disc pl-5 space-y-1">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <div class="grid md:grid-cols-2 gap-8">
             
             <!-- Columna Izquierda: Formulario -->
             <div class="bg-gradient-to-br from-[#1a0b2e] to-[#2d1b4e] p-8 rounded-2xl border border-purple-800/50 shadow-2xl shadow-purple-900/30 hover:border-purple-600 transition-all duration-500 flex flex-col h-full">
-                <form class="space-y-5 flex-1 flex flex-col">
+                <form method="POST" action="{{ route('contacto.store') }}" class="space-y-5 flex-1 flex flex-col">
+                    @csrf
                     <div>
                         <label for="nombre" class="block text-sm font-medium mb-2 text-purple-300">{{ __('messages.contact.form.nombre') }}</label>
                         <input type="text" id="nombre" name="nombre" required
                             class="w-full px-4 py-3 bg-[#2d1b4e] border border-purple-700/50 rounded-lg focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 transition placeholder-gray-500"
-                            placeholder="Tu nombre">
+                            placeholder="{{__('messages.placeholder.nombre')}}">
                     </div>
 
                     <div>
                         <label for="email" class="block text-sm font-medium mb-2 text-purple-300">{{ __('messages.contact.form.email') }}</label>
                         <input type="email" id="email" name="email" required
                             class="w-full px-4 py-3 bg-[#2d1b4e] border border-purple-700/50 rounded-lg focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 transition placeholder-gray-500"
-                            placeholder="tu@email.com">
+                            placeholder="{{__('messages.placeholder.email')}}">
                     </div>
 
                     <div>
                         <label for="asunto" class="block text-sm font-medium mb-2 text-purple-300">{{ __('messages.contact.form.asunto') }}</label>
                         <input type="text" id="asunto" name="asunto" required
                             class="w-full px-4 py-3 bg-[#2d1b4e] border border-purple-700/50 rounded-lg focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 transition placeholder-gray-500"
-                            placeholder="¿De qué quieres hablar?">
+                            placeholder="{{__('messages.placeholder.asunto')}}">
                     </div>
 
                     <div class="flex-1 flex flex-col">
                         <label for="mensaje" class="block text-sm font-medium mb-2 text-purple-300">{{ __('messages.contact.form.mensaje') }}</label>
                         <textarea id="mensaje" name="mensaje" required
                             class="w-full px-4 py-3 bg-[#2d1b4e] border border-purple-700/50 rounded-lg focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 transition resize-none placeholder-gray-500 flex-1"
-                            placeholder="Cuéntame sobre tu proyecto..."></textarea>
+                            placeholder="{{__('messages.placeholder.mensaje')}}"></textarea>
                     </div>
 
                     <button type="submit" 
@@ -800,7 +975,7 @@
     <!-- Footer -->
     <footer class="bg-[#1a0b2e] border-t border-purple-900/30 py-8 px-4">
         <div class="max-w-7xl mx-auto text-center">
-            <p class="text-gray-400">© 2025 Leandro Cebreiros. Desarrollado con Laravel</p>
+            <p class="text-gray-400">2025 Leandro Cebreiros. {{__('messages.footer.description')}}</p>
         </div>
     </footer>
 
@@ -976,67 +1151,54 @@
         // Datos de los proyectos
         const projectsData = {
             gestior: {
-                title: 'Gestior',
-                    images: [
+                title: "{{ __('messages.modal.gestior.title') }}",
+                images: [
                         '/images/proyectos/gestior/1.png',
                         '/images/proyectos/gestior/2.png',
                         '/images/proyectos/gestior/3.png',
                         '/images/proyectos/gestior/4.png'
                     ],
-                    description: `
-                        <p class="mb-4">Gestior es una herramienta de gestión económica diseñada para cubrir las necesidades tanto de pequeños comerciantes como de grandes empresas, centralizando la administración en un solo panel intuitivo.</p>
-                        <h4 class="text-lg font-semibold mb-2">Funciones principales:</h4>
-                        <ul class="list-disc list-inside mb-4 space-y-2 text-gray-300">
-                            <li>Administración de sucursales y empleados con permisos personalizados</li>
-                            <li>Gestión de productos y gastos a nivel general y seccional</li>
-                            <li>Creación y administración de pedidos para clientes con comprobantes personalizados</li>
-                            <li>Gestión de pagos y control de cuentas</li>
-                            <li>Gestión de stock e historial para seguimiento contable</li>
-                            <li>Panel amigable para administrar datos sin conocimientos técnicos de bases de datos</li>
-                        </ul>
-                        <h4 class="text-lg font-semibold mb-2">Tecnologías y detalles:</h4>
-                        <ul class="list-disc list-inside mb-4 space-y-2 text-gray-300">
-                            <li>Desarrollado en PHP Laravel 12</li>
-                            <li>Base de datos SQL</li>
-                            <li>Componentes interactivos con Livewire</li>
-                            <li>Scopes para búsquedas precisas</li>
-                            <li>Autenticación Fortify y registro mediante keys generadas por el superusuario</li>
-                            <li>Desplegado en AWS</li>
-                        </ul>
-                    `,
-                    technologies: ['Laravel 12', 'SQL', 'Livewire', 'Fortify', 'AWS'],
-                    demoUrl: '#',
-                    repoUrl: '#'
-                },
-                cuanto_sabe: {
-                    title: 'Cuanto Sabe',
-                    images: [
+                description: {!! json_encode(\Illuminate\Support\Facades\Lang::has('messages.modal.gestior.description_html')
+                    ? __('messages.modal.gestior.description_html')
+                    : \Illuminate\Support\Facades\Lang::get('messages.modal.gestior.description_html', [], 'es')) !!},
+                technologies: ['Laravel 12', 'SQL', 'Livewire', 'Fortify', 'AWS'],
+                demoUrl: '#',
+                repoUrl: '#'
+            },
+            cuanto_sabe: {
+                title: "{{ __('messages.modal.cuantosabe.title') }}",
+                images: [
                         '/images/proyectos/cuantosabe/1.png',
                         '/images/proyectos/cuantosabe/2.png',
                         '/images/proyectos/cuantosabe/3.png',
                         '/images/proyectos/cuantosabe/4.png'
                     ],
-                    description: `
-                        <p class="mb-4">Cuanto Sabe es un juego web desarrollado en Laravel, pensado para integrarse como overlay en streaming. Permite la interacción en tiempo real entre host, invitado y público.</p>
-                        <h4 class="text-lg font-semibold mb-2">Características principales:</h4>
-                        <ul class="list-disc list-inside mb-4 space-y-2 text-gray-300">
-                            <li>El host administra el juego desde un panel dedicado</li>
-                            <li>El invitado responde preguntas en vivo, visualizando solo su interfaz</li>
-                            <li>El público participa desde la plataforma, mostrando puntajes en tiempo real</li>
-                            <li>Comunicación entre componentes mediante Laravel Websockets (Pusher)</li>
-                            <li>Landing informativa, página de repeticiones y demo pública</li>
-                        </ul>
-                        <h4 class="text-lg font-semibold mb-2">Tecnologías y detalles:</h4>
-                        <ul class="list-disc list-inside mb-4 space-y-2 text-gray-300">
-                            <li>Laravel 12 y base de datos SQL</li>
-                            <li>Overlay y ruleta desarrollados en JavaScript</li>
-                            <li>Desplegado en Hostinger (juego) y AWS (página pública)</li>
-                        </ul>
-                    `,
-                    technologies: ['Laravel 12', 'SQL', 'Websockets', 'JavaScript', 'Pusher', 'AWS', 'Hostinger'],
-                    demoUrl: '#',
-                    repoUrl: '#'
-                }
+                description: {!! json_encode(\Illuminate\Support\Facades\Lang::has('messages.modal.cuantosabe.description_html')
+                    ? __('messages.modal.cuantosabe.description_html')
+                    : \Illuminate\Support\Facades\Lang::get('messages.modal.cuantosabe.description_html', [], 'es')) !!},
+                referencesHtml: {!! json_encode(\Illuminate\Support\Facades\Lang::has('messages.modal.cuantosabe.references_html')
+                    ? __('messages.modal.cuantosabe.references_html')
+                    : \Illuminate\Support\Facades\Lang::get('messages.modal.cuantosabe.references_html', [], 'es')) !!},
+                // Datos de contacto (con fallback a ES si faltan en el locale actual)
+                contact: {
+                  name: {!! json_encode(\Illuminate\Support\Facades\Lang::has('messages.modal.cuantosabe.name') ? __('messages.modal.cuantosabe.name') : \Illuminate\Support\Facades\Lang::get('messages.modal.cuantosabe.name', [], 'es')) !!},
+                  role: {!! json_encode(\Illuminate\Support\Facades\Lang::has('messages.modal.cuantosabe.role') ? __('messages.modal.cuantosabe.role') : \Illuminate\Support\Facades\Lang::get('messages.modal.cuantosabe.role', [], 'es')) !!},
+                  email: {!! json_encode(\Illuminate\Support\Facades\Lang::has('messages.modal.cuantosabe.email') ? __('messages.modal.cuantosabe.email') : \Illuminate\Support\Facades\Lang::get('messages.modal.cuantosabe.email', [], 'es')) !!},
+                  phone: {!! json_encode(\Illuminate\Support\Facades\Lang::has('messages.modal.cuantosabe.phone') ? __('messages.modal.cuantosabe.phone') : \Illuminate\Support\Facades\Lang::get('messages.modal.cuantosabe.phone', [], 'es')) !!},
+                  phoneHref: {!! json_encode(\Illuminate\Support\Facades\Lang::has('messages.modal.cuantosabe.phone_href') ? __('messages.modal.cuantosabe.phone_href') : \Illuminate\Support\Facades\Lang::get('messages.modal.cuantosabe.phone_href', [], 'es')) !!},
+                  streamUser: {!! json_encode(\Illuminate\Support\Facades\Lang::has('messages.modal.cuantosabe.stream_user') ? __('messages.modal.cuantosabe.stream_user') : \Illuminate\Support\Facades\Lang::get('messages.modal.cuantosabe.stream_user', [], 'es')) !!},
+                  instagramUrl: {!! json_encode(\Illuminate\Support\Facades\Lang::has('messages.modal.cuantosabe.instagram_url') ? __('messages.modal.cuantosabe.instagram_url') : \Illuminate\Support\Facades\Lang::get('messages.modal.cuantosabe.instagram_url', [], 'es')) !!},
+                  labels: {
+                    email: {!! json_encode(\Illuminate\Support\Facades\Lang::has('messages.modal.labels.email') ? __('messages.modal.labels.email') : \Illuminate\Support\Facades\Lang::get('messages.modal.labels.email', [], 'es')) !!},
+                    phone: {!! json_encode(\Illuminate\Support\Facades\Lang::has('messages.modal.labels.phone') ? __('messages.modal.labels.phone') : \Illuminate\Support\Facades\Lang::get('messages.modal.labels.phone', [], 'es')) !!},
+                    stream: {!! json_encode(\Illuminate\Support\Facades\Lang::has('messages.modal.labels.stream') ? __('messages.modal.labels.stream') : \Illuminate\Support\Facades\Lang::get('messages.modal.labels.stream', [], 'es')) !!},
+                    instagram: {!! json_encode(\Illuminate\Support\Facades\Lang::has('messages.modal.labels.instagram') ? __('messages.modal.labels.instagram') : \Illuminate\Support\Facades\Lang::get('messages.modal.labels.instagram', [], 'es')) !!},
+                  }
+                },
+                technologies: ['Laravel 12', 'SQL', 'Websockets', 'JavaScript', 'Pusher', 'AWS', 'Hostinger'],
+                demoUrl: '#',
+                repoUrl: '#'
+            }
             };
 
                 // Mostrar contenido del proyecto dentro del modal
@@ -1056,14 +1218,14 @@
                                     
                                     ${project.images && project.images.length > 1 ? `
                                         <button onclick="prevImage()" 
-                                                aria-label="Anterior" 
+                                                aria-label="{{ __('messages.modal.gallery.prev') }}" 
                                                 class="absolute left-6 top-1/2 -translate-y-1/2 p-3 bg-black/50 hover:bg-black/80 text-white/90 hover:text-white rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transform hover:scale-105">
                                             <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                                             </svg>
                                         </button>
                                         <button onclick="nextImage()" 
-                                                aria-label="Siguiente" 
+                                                aria-label="{{ __('messages.modal.gallery.next') }}" 
                                                 class="absolute right-6 top-1/2 -translate-y-1/2 p-3 bg-black/50 hover:bg-black/80 text-white/90 hover:text-white rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transform hover:scale-105">
                                             <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
@@ -1073,7 +1235,7 @@
                                         <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-3">
                                             ${project.images.map((_, index) => `
                                                 <button onclick="showImage(${index})" 
-                                                        aria-label="Ver imagen ${index+1}" 
+                                                        aria-label="{{ __('messages.modal.gallery.view_image') }} ${index+1}" 
                                                         class="w-2 h-2 rounded-full bg-white/40 hover:bg-white transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-400 transform hover:scale-125"></button>
                                             `).join('')}
                                         </div>
@@ -1085,30 +1247,61 @@
                             <div class="p-6 sm:p-8">
                                 <h2 class="text-2xl sm:text-3xl font-bold mb-4 text-white">${project.title}</h2>
                                 
-                                <div class="prose prose-invert max-w-none text-sm sm:text-base text-gray-300 mb-6">
+                                <div class="prose prose-invert max-w-none text-sm sm:text-base text-gray-300 mb-5">
                                     ${project.description}
                                 </div>
 
-                                <div class="flex flex-wrap gap-2 mb-6">
+                                <div class="flex flex-wrap gap-2 mb-5">
                                     ${project.technologies.map(tech => `
                                         <span class="px-3 py-1.5 bg-[#150d28] text-purple-300 text-xs sm:text-sm rounded-full border border-purple-900/30 hover:border-purple-500/50 transition-colors duration-300">${tech}</span>
                                     `).join('')}
                                 </div>
 
-                                <div class="flex flex-col sm:flex-row gap-4">
-                                    <a href="${project.repoUrl}" target="_blank" 
-                                       class="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-[#150d28] hover:bg-purple-900/20 text-purple-300 hover:text-purple-200 rounded-xl transition-all duration-300 text-sm font-medium border border-purple-900/30 hover:border-purple-500/50 transform hover:-translate-y-0.5">
-                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                                        </svg>
-                                        Ver Código Fuente
-                                    </a>
+                                <div class="mt-5 pt-5 border-t border-white/10">
+                                  <div class="flex items-center gap-2 mb-2">
+                                    <span class="inline-block w-2.5 h-2.5 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 shadow-[0_0_8px_rgba(168,85,247,.6)]"></span>
+                                    <h3 class="text-[11px] font-semibold uppercase tracking-wide text-purple-300">{{ __('messages.modal.references') }}</h3>
+                                  </div>
+                                  <!-- Línea principal: Nombre | Stream + Rol debajo -->
+                                  ${(project.contact?.name || project.contact?.streamUser) ? `
+                                  <div class=\"mb-2\">
+                                    <div class=\"flex items-center gap-2 text-sm text-gray-300\">
+                                      <svg class=\"w-4 h-4 text-purple-300\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M5.121 17.804A7 7 0 0112 15a7 7 0 016.879 2.804\"/><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M15 11a3 3 0 11-6 0 3 3 0 016 0z\"/></svg>
+                                      <span class=\"font-medium text-white\">${project.contact?.name || ''}</span>
+                                      ${(project.contact?.name && project.contact?.streamUser) ? '<span class=\\"text-gray-500\\">|</span>' : ''}
+                                      ${project.contact?.streamUser ? `<span class=\"text-purple-200\">${project.contact.streamUser}</span>` : ''}
+                                    </div>
+                                    ${project.contact?.role ? `<div class=\"mt-1 text-[12px] text-gray-500\">${project.contact.role}</div>` : ''}
+                                  </div>` : ''}
+
+                                  <div class="flex flex-wrap items-center gap-2.5 mb-2">
+                                    ${project.contact?.email ? `
+                                    <a href="mailto:${project.contact.email}" title="${project.contact.email}" aria-label="${project.contact.email}" class="inline-flex items-center gap-2 px-2 py-1 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-purple-200 text-xs transition focus:outline-none focus:ring-2 focus:ring-purple-500/40">
+                                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l9 6 9-6M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                                      <span class="truncate">${project.contact.email}</span>
+                                    </a>` : ''}
+                                    ${project.contact?.phone ? `
+                                    <a href="https://wa.me/${(project.contact.phoneHref || '').replace(/[^\d]/g,'')}" target="_blank" rel="noopener" title="${project.contact.phone}" aria-label="${project.contact.phone}" class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-purple-200 text-xs transition focus:outline-none focus:ring-2 focus:ring-purple-500/40">
+                                      <svg class="w-4 h-4" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M19.11 17.41c-.3-.15-1.77-.87-2.05-.97-.27-.1-.47-.15-.67.15-.2.29-.77.97-.95 1.17-.17.19-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.47-.89-.79-1.49-1.76-1.67-2.06-.17-.29-.02-.45.13-.59.13-.13.3-.34.45-.52.15-.17.2-.29.3-.49.1-.19.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51l-.57-.01c-.2 0-.52.07-.79.37-.27.29-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.08c.15.19 2.1 3.2 5.08 4.48.71.31 1.26.49 1.69.62.71.22 1.36.19 1.87.11.57-.08 1.77-.72 2.02-1.41.25-.69.25-1.29.17-1.41-.07-.12-.27-.19-.57-.34z"/><path d="M16.02 3C9.38 3 4 8.27 4 14.77c0 2.32.77 4.46 2.07 6.2L4 29l8.23-2.6c1.68.92 3.61 1.44 5.8 1.44 6.64 0 12.02-5.27 12.02-11.77S22.66 3 16.02 3zm0 21.32c-1.92 0-3.7-.57-5.2-1.55l-.37-.24-4.88 1.54 1.6-4.62-.24-.39a9.45 9.45 0 01-1.48-5.29c0-5.25 4.38-9.5 9.77-9.5s9.77 4.26 9.77 9.5-4.38 9.5-9.77 9.5z"/></svg>
+                                      <span class="truncate">${project.contact.phone}</span>
+                                    </a>` : ''}
+                                    ${project.contact?.instagramUrl ? `
+                                    <a href="${project.contact.instagramUrl}" target="_blank" aria-label="${project.contact.labels?.instagram || 'Instagram'}" class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-purple-200 text-xs transition focus:outline-none focus:ring-2 focus:ring-purple-500/40">
+                                      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="18" height="18" rx="5" ry="5" stroke-width="2"/><circle cx="12" cy="12" r="4" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/></svg>
+                                      ${project.contact?.streamUser ? `<span class="truncate">@${project.contact.streamUser}</span>` : ''}
+                                    </a>` : ''}
+                                  </div>
+                                  
+                                </div>
+                                
+
+                                <div class="flex">
                                     <a href="${project.title === 'Cuanto Sabe' ? '/cuanto-sabe-demo' : project.demoUrl}" target="_blank"
                                        class="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600/20 to-pink-600/20 hover:from-purple-600/30 hover:to-pink-600/30 text-purple-200 rounded-xl transition-all duration-300 text-sm font-medium border border-purple-500/30 hover:border-pink-500/50 transform hover:-translate-y-0.5">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
                                         </svg>
-                                        Ver Demo
+                                        {{ __('messages.modal.actions.demo') }}
                                     </a>
                                 </div>
                             </div>
@@ -1195,6 +1388,57 @@
             });
         }
     </script>
+    <script>
+  function switchLanguageWithTransition(e, locale){
+    e.preventDefault();
+    // Texto
+    const texts = { es:'Cambiando a Español', en:'Switching to English' };
+    const t = document.getElementById('transitionLangText');
+    if(t) t.textContent = texts[locale] || 'Cambiando idioma';
+
+    // Marcar sesión (para el doc destino) y prender overlay YA en esta página
+    try { sessionStorage.setItem('langTransitionActive','true'); } catch(_){}
+    document.documentElement.setAttribute('data-lang-transition','on');
+    // Bloquear scroll mientras está el loader
+    try { document.body.style.overflow = 'hidden'; } catch(_){}
+
+    // Navegar
+    const href = `/lang/${locale}`;
+    // Pequeña demora para que el loader cubra el cambio y se perciba suave
+    setTimeout(() => { window.location.href = href; }, 380);
+  }
+
+  // Auto-hook a enlaces /lang/*
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('a[href*="/lang/"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const locale = (a.getAttribute('href')||'').split('/').pop();
+        if(locale) switchLanguageWithTransition(e, locale);
+      });
+    });
+  });
+
+  // En el documento destino: salida suave cuando todo cargó
+  window.addEventListener('load', () => {
+    const html = document.documentElement;
+    if (html.getAttribute('data-lang-transition') === 'on') {
+      // Limpia la marca para próximas navegaciones
+      try { sessionStorage.removeItem('langTransitionActive'); } catch(_){}
+      // Dispara salida
+      html.classList.add('lang-exit');
+
+      const overlay = document.getElementById('langTransitionOverlay');
+      const finish = () => {
+        html.classList.remove('lang-exit');
+        html.removeAttribute('data-lang-transition');
+        overlay && overlay.removeEventListener('transitionend', finish);
+        try { document.body.style.overflow = ''; } catch(_){}
+      };
+      overlay && overlay.addEventListener('transitionend', finish);
+      setTimeout(finish, 800); // fallback
+    }
+  });
+</script>
 
     <!-- Modal de Proyecto -->
     <div id="projectModal" class="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto overflow-x-hidden p-4 sm:p-6 opacity-0 pointer-events-none transition-all duration-300">
@@ -1203,5 +1447,6 @@
             <!-- El contenido del modal se insertará aquí dinámicamente -->
         </div>
     </div>
+</div>
 </body>
 </html>

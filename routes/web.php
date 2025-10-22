@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ContactoController;
+use App\Http\Controllers\ContactController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,7 +32,7 @@ Route::get('/', function () {
 })->name('home');
 
 // Ruta para procesar el formulario de contacto
-Route::post('/contacto', [ContactoController::class, 'store'])->name('contacto.store');
+Route::post('/contacto', [ContactController::class, 'send'])->name('contacto.store');
 
 // cuanto sabe demo
 Route::view('/cuanto-sabe-demo', 'cuanto-sabe-demo')->name('cuanto-sabe-demo');

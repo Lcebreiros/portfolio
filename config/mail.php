@@ -115,4 +115,18 @@ return [
         'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Global "To" Address (Contact Form Destination)
+    |--------------------------------------------------------------------------
+    |
+    | Dirección destino para mensajes del formulario de contacto. Se puede
+    | definir mediante la variable de entorno MAIL_TO_ADDRESS. Usar esta
+    | clave desde el código permite que funcione correctamente con
+    | "php artisan config:cache" en producción.
+    |
+    */
+
+    'to_address' => env('MAIL_TO_ADDRESS', 'lean.cebreiros.a@gmail.com'),
+
 ];

@@ -394,3 +394,118 @@ body {
 .btn-cv:active {
     transform: translateY(0) scale(0.98);
 }
+
+/* ============================================
+   TRANSICIÓN DE CAMBIO DE IDIOMA
+   ============================================ */
+
+/* Overlay de transición con efecto de barrido */
+#langTransitionOverlay {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(135deg, #7c3aed 0%, #ec4899 50%, #9333ea 100%);
+    background-size: 200% 200%;
+    z-index: 9999;
+    transition: left 0.7s cubic-bezier(0.77, 0, 0.175, 1);
+    pointer-events: none;
+    animation: gradient-shift 3s ease infinite;
+}
+
+#langTransitionOverlay.active {
+    left: 0;
+}
+
+#langTransitionOverlay.exit {
+    left: 100%;
+}
+
+/* Contenedor del texto animado */
+.transition-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+#langTransitionOverlay.active .transition-content {
+    opacity: 1;
+    transition-delay: 0.2s;
+}
+
+/* Spinner del idioma */
+.lang-spinner {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 1.5rem;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Texto de transición */
+.transition-text {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    letter-spacing: 0.05em;
+}
+
+/* Puntos de carga animados */
+.loading-dots {
+    display: inline-flex;
+    gap: 0.25rem;
+    margin-left: 0.25rem;
+}
+
+.loading-dots span {
+    width: 6px;
+    height: 6px;
+    background-color: white;
+    border-radius: 50%;
+    animation: bounce-dot 1.4s infinite ease-in-out;
+}
+
+.loading-dots span:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.loading-dots span:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+@keyframes bounce-dot {
+    0%, 80%, 100% {
+        transform: scale(0);
+        opacity: 0.5;
+    }
+    40% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .transition-text {
+        font-size: 1.25rem;
+    }
+    
+    .lang-spinner {
+        width: 48px;
+        height: 48px;
+    }
+}
